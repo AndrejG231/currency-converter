@@ -1,7 +1,7 @@
 import "reflect-metadata"
 import express from "express"
 import { ApolloServer, gql } from "apollo-server-express"
-import { validateEnvs } from "./utils/validate_envs"
+import { validateEnvs } from "src/utils/validate_envs"
 
 const typeDefs = gql`
   type Book {
@@ -28,7 +28,7 @@ async function main() {
 
   server.applyMiddleware({ app })
 
-  app.listen({ port: ~~process.env.PORT! }, () =>
+  app.listen({ port: ~~process.env.PORT }, () =>
     console.log("Server ready at ", process.env.PORT)
   )
 }
