@@ -1,11 +1,9 @@
+import { EnvKey } from "src/constants/env_keys"
+
 declare global {
   namespace NodeJS {
-    interface ProcessEnv {
-      PORT: string
-    }
+    interface ProcessEnv extends Record<EnvKey, string> {}
   }
 }
 
-// If this file has no import/export statements (i.e. is a script)
-// convert it into a module by adding an empty export statement.
 export {}
