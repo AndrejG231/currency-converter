@@ -30,7 +30,7 @@ class ExchangeRate implements ExchangeRateType {
  * - periodically updates local data
  * - handles conversions
  */
-class ConverterService {
+export class ConverterService {
   api: Api
   allowedCurrencies: Record<string, string>
   exchangeRates: ExchangeRates
