@@ -11,6 +11,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "@types/mongoose": "^5.11.97",
     "@types/node": "^17.0.18",
     "dotenv": "^16.0.0",
     "nodemon": "^2.0.15",
@@ -23,6 +24,7 @@
     "axios": "^0.26.0",
     "express": "^4.17.3",
     "graphql": "^16.3.0",
+    "mongoose": "^6.2.2",
     "reflect-metadata": "^0.1.13"
   }
 }
