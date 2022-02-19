@@ -1,0 +1,2 @@
+PORT=__SERVER_PORT__
+CONVERSION_ACCESS_KEY=__currencylayer.com key__

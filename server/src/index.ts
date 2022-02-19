@@ -3,6 +3,10 @@ import express from "express"
 import { ApolloServer, gql } from "apollo-server-express"
 import { validateEnvs } from "src/utils/validate_envs"
 
+if (process.env.MODE === "dev") {
+  require("dotenv").config()
+}
+
 const typeDefs = gql`
   type Book {
     title: String
