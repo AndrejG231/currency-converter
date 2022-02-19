@@ -4,6 +4,8 @@ type ConversionsType = {
   from: string
   to: string
   amount: number
+  createdAt: Date
+  updatedAt: Date
 }
 
 const ConversionSchema = new Schema<ConversionsType>(
