@@ -1,30 +1,23 @@
-import "reflect-metadata"
+import { ApolloServer } from "apollo-server-express"
 import express from "express"
-import { ApolloServer, gql } from "apollo-server-express"
-import { validateEnvs } from "src/utils/validate_envs"
-import { initConverterService } from "src/services/currency_converter"
-import { initMongoStore } from "src/services/mongo_store"
-import { Context } from "src/types/context"
-import { models } from "src/models"
+import { buildSchema } from "type-graphql"
+import { models } from "./models"
+import { initMongoStore } from "./services/mongo_store"
+import { validateEnvs } from "./utils/validate_envs"
+import { ConvertResolver } from "./resolvers/convert_resolver"
+import { initConverterService } from "./services/currency_converter/service"
+import { Context } from "./types/context"
 
 if (process.env.MODE === "dev") {
   require("dotenv").config()
 }
 
-const typeDefs = gql`
-  type Book {
-    title: String
-    author: String
-  }
-  type Query {
-    books: [Book]
-  }
-`
-
 async function main() {
   console.log("Launching server...")
 
   validateEnvs()
+
+  const schema = await buildSchema({ resolvers: [ConvertResolver] })
 
   const converter = await initConverterService()
   const store = await initMongoStore()
@@ -32,7 +25,7 @@ async function main() {
   const app = express()
 
   const server = new ApolloServer({
-    typeDefs,
+    schema,
     context: ({ req, res }): Context => ({
       req,
       res,

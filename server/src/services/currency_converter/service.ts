@@ -82,6 +82,10 @@ export class ConverterService {
 
     return { success: true, value: newExchangeRate.convert(value) }
   }
+
+  isValidCurrency(currency: string): boolean {
+    return !!this.allowedCurrencies[currency]
+  }
 }
 
 /**
