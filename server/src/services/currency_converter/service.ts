@@ -1,28 +1,7 @@
-import { DAY } from "src/constants/time"
-import { ConversionResponse } from "."
+import { LiveRates, LiveRatesResponse } from "."
+import { timeoutAsync } from "../../utils/timeout_async"
 import { Api } from "./api"
-import { ExchangeRate as ExchangeRateType, ExchangeRates } from "./types"
-
-/**
- * Holds information about cached exchange rate
- */
-class ExchangeRate implements ExchangeRateType {
-  rate: number
-  validUntil: number
-
-  constructor(data: { rate: number; timestamp: number }) {
-    this.rate = data.rate
-    this.validUntil = data.timestamp + DAY
-  }
-
-  get isValid(): boolean {
-    return new Date().getTime() <= this.validUntil
-  }
-
-  convert(value: number): number {
-    return value * this.rate
-  }
-}
+import { UPDATE_FREQUENCY } from "./constants"
 
 /**
  * Currency converter service
@@ -33,54 +12,85 @@ class ExchangeRate implements ExchangeRateType {
 export class ConverterService {
   api: Api
   allowedCurrencies: Record<string, string>
-  exchangeRates: ExchangeRates
+  exchangeRates: Record<string, number> = {}
+  validTo: number
+  loading: boolean
+  incomingRates: Promise<LiveRatesResponse>
 
-  constructor(api: Api, allowedCurrencies: Record<string, string>) {
+  constructor(api: Api) {
     this.api = api
-    this.allowedCurrencies = allowedCurrencies
-    this.exchangeRates = {}
   }
 
-  async convert(
-    from: string,
-    to: string,
-    value: number
-  ): Promise<ConversionResponse> {
-    const currentExchangeRate = this.exchangeRates[from]?.[to]
+  get isValid(): boolean {
+    return this.validTo >= new Date().getTime()
+  }
 
-    // check if there is currently valid cached exchange rate and use it
-    if (currentExchangeRate?.isValid) {
-      return { success: true, value: currentExchangeRate.convert(value) }
+  /**
+   *  Used to load exchange and allowed currencies into cache
+   *  Exchange rates should be valid for update frequency
+   *  Errors on initializing should prevent server from running
+   *  Errors on updates (expired rates) should be ignored - use old data
+   */
+  async loadExchangeRates() {
+    this.loading = true
+    this.incomingRates = this.api.live()
+    const response = await this.incomingRates
+    this.loading = false
+
+    if (response.success) {
+      this.exchangeRates = Object.entries(response.quotes).reduce(
+        (acc, [key, val]) => ({
+          ...acc,
+          [key.slice(3)]: val,
+        }),
+        {} as Record<string, number>
+      )
+
+      // When to refetch new exchange rates
+      this.validTo = new Date().getTime() + UPDATE_FREQUENCY
+
+      return true
     }
 
-    // Invalid cached exchange rate - fetch and store new
+    return false
+  }
 
-    const newExchangeRateData = await this.api.live(from, [to])
-
-    // Return error response in case of failed to fetch new data
-    if (!newExchangeRateData.success) return newExchangeRateData
-
-    // Case of successful api response with wrong values?
-    if (!newExchangeRateData.quotes[from + to])
-      return {
-        success: false,
-        error: {
-          code: 500,
-          info: "Received invalid conversion data from conversion server.",
-        },
-      }
-
-    // Cache new exchange rate
-    const newExchangeRate = new ExchangeRate({
-      rate: newExchangeRateData.quotes[from + to],
-      timestamp: newExchangeRateData.timestamp,
-    })
-    this.exchangeRates[from] = {
-      ...this.exchangeRates[from],
-      [to]: newExchangeRate,
+  /**
+   * Load allowed currencies
+   * Currently used only on initializing
+   */
+  async loadAllowedCurrencies(): Promise<boolean> {
+    const response = await this.api.list()
+    if (!response.success) {
+      return false
     }
 
-    return { success: true, value: newExchangeRate.convert(value) }
+    this.allowedCurrencies = response.currencies
+
+    return true
+  }
+
+  /**
+   * Returns exchange rate between two currencies
+   * Since free api does not support base currency, will be calculated from USD exchange rates
+   * Reloads exchange rates after update
+   */
+  async getExchangeRate(from: string, to: string): Promise<number> {
+    if (!this.isValidCurrency(from) || !this.isValidCurrency(to))
+      throw new Error(`Requested exchange rate for invalid currency.`)
+
+    if (!this.loading && !this.isValid) {
+      this.loadExchangeRates()
+    }
+
+    await this.incomingRates
+
+    return this.exchangeRates[to] / this.exchangeRates[from]
+  }
+
+  async convert(from: string, to: string, value: number): Promise<number> {
+    const rate = await this.getExchangeRate(from, to)
+    return rate * value
   }
 
   isValidCurrency(currency: string): boolean {
@@ -92,15 +102,16 @@ export class ConverterService {
  * Initialize currency converter service
  */
 const initConverterService = async () => {
+  let success: boolean
   const api = new Api()
+  const converter = new ConverterService(api)
 
-  // Fetch initial available currencies
-  const initialData = await api.list()
+  // Fetch initial data
+  success = await converter.loadAllowedCurrencies()
+  await timeoutAsync(2000) // free-tier API has rate limits for consecutive calls
+  success = await converter.loadExchangeRates()
 
-  if (!initialData.success)
-    throw new Error(`Failed to fetch initial data:\n", ${initialData}, \n`)
-
-  const converter = new ConverterService(api, initialData.currencies)
+  if (!success) throw new Error(`Failed to initialize conversion service.`)
 
   return converter
 }

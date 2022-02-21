@@ -9,33 +9,6 @@ export type Error = {
   }
 }
 
-/**
- * Service
- */
-
-export type ExchangeRate = {
-  rate: number
-  validUntil: number
-  isValid: boolean
-  convert(value: number): number
-}
-
-export type ExchangeRates = {
-  [key in string /* from */]?: {
-    [key in string /* to */]?: ExchangeRate
-  }
-}
-
-export type Conversion = {
-  value: number
-}
-
-export type ConversionResponse = Response<Conversion>
-
-/**
- * API
- */
-
 // get /list
 export type AvailableCurrencies = {
   terms: string

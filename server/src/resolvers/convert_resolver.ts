@@ -2,7 +2,6 @@ import { Arg, Ctx, Query, Resolver } from "type-graphql"
 import { Context } from "../types/context"
 import { ConversionResponse } from "../typedefs/response_conversion"
 import { InvalidCurrencyError } from "../typedefs/error_invalid_currency"
-import { ExternalConversionError } from "../typedefs/error_external_conversion"
 
 @Resolver()
 class ConvertResolver {
@@ -19,11 +18,7 @@ class ConvertResolver {
     if (!services.converter.isValidCurrency(to))
       throw new InvalidCurrencyError("to", to)
 
-    const result = await services.converter.convert(from, to, amount)
-
-    if (!result.success) {
-      throw new ExternalConversionError(result.error)
-    }
+    const result = services.converter.convert(from, to, amount)
 
     // Store conversions history in database
     new models.Conversions({
@@ -32,7 +27,7 @@ class ConvertResolver {
       amount,
     }).save()
 
-    return { value: result.value }
+    return { value: result }
   }
 }
 
