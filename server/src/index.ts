@@ -5,9 +5,10 @@ import { buildSchema } from "type-graphql"
 import { models } from "./models"
 import { initMongoStore } from "./services/mongo_store"
 import { validateEnvs } from "./utils/validate_envs"
-import { ConvertResolver } from "./resolvers/convert_resolver"
 import { initConverterService } from "./services/currency_converter/service"
 import { Context } from "./types/context"
+import { ConvertResolver } from "./resolvers/convert"
+import { StatisticsResolver } from "./resolvers/statistics"
 
 if (process.env.MODE === "dev") {
   require("dotenv").config()
@@ -18,7 +19,9 @@ async function main() {
 
   validateEnvs()
 
-  const schema = await buildSchema({ resolvers: [ConvertResolver] })
+  const schema = await buildSchema({
+    resolvers: [ConvertResolver, StatisticsResolver],
+  })
 
   const converter = await initConverterService()
   const store = await initMongoStore()
