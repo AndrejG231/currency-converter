@@ -6,6 +6,9 @@ import { Currency } from "../typedefs/currency"
 
 @Resolver()
 class ConvertResolver {
+  /**
+   * Availbale Currencies
+   */
   @Query(() => [Currency])
   availableCurrencies(@Ctx() { services }: Context): Currency[] {
     return Object.entries(services.converter.allowedCurrencies).map(
@@ -16,6 +19,9 @@ class ConvertResolver {
     )
   }
 
+  /**
+   * Convert
+   */
   @Query(() => ConversionResponse)
   async conver(
     @Arg("source") source: string,
@@ -31,12 +37,14 @@ class ConvertResolver {
 
     const result = await services.converter.convert(source, destination, amount)
 
-    // Store conversions history in database
-    new models.Conversions({
-      source,
-      destination,
-      amount,
-    }).save()
+    // Convert to USD and store in database
+    services.converter.convert(source, "USD", amount).then((amount) => {
+      new models.Conversions({
+        source,
+        destination,
+        amount,
+      }).save()
+    })
 
     return { value: result, source, destination }
   }
