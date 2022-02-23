@@ -4,7 +4,8 @@ const theme: DefaultTheme = {
   colors: {
     bgPrimary: "#0C081B",
     bgSecondary: "#3666AE",
-    white: "#FFFFF",
+    white: "#FFFFFF",
+    gray: "#2E3041",
   },
 }
 
