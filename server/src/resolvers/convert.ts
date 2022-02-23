@@ -46,7 +46,7 @@ class ConvertResolver {
       }).save()
     })
 
-    return { value: result, source, destination }
+    return { inputValue: amount, value: result, source, destination }
   }
 }
 
