@@ -8,20 +8,24 @@ import { BrowserRouter } from "react-router-dom"
 import { FloatingNavbar } from "../components/FloatingNavbar"
 import { Header } from "../components/Header"
 import { Main } from "../components/Main"
+import { ApolloProvider } from "@apollo/client"
+import { client } from "../api/client"
 
 const App = () => {
   return (
     <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <Screen>
-          <Header>Currency Converter</Header>
-          <Main>
-            <Router routes={routes} />
-          </Main>
-          <FloatingNavbar routes={routes} />
-        </Screen>
-      </ThemeProvider>
+      <ApolloProvider client={client}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <Screen>
+            <Header>Currency Converter</Header>
+            <Main>
+              <Router routes={routes} />
+            </Main>
+            <FloatingNavbar routes={routes} />
+          </Screen>
+        </ThemeProvider>
+      </ApolloProvider>
     </BrowserRouter>
   )
 }

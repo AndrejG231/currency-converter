@@ -18,7 +18,7 @@ const FallbackText = styled.span`
 const Fallback: FC = ({ children }) => {
   return (
     <Wrapper>
-      <FallbackText>Loading...</FallbackText>
+      <FallbackText>{children}</FallbackText>
     </Wrapper>
   )
 }

@@ -1,24 +1,37 @@
-import styled from "styled-components"
 import { Title } from "../../components/Title"
 import { Layuot, Stat, StatInfo } from "./styles"
+import { useStatisticsQuery } from "../../api/generated"
+import { Fallback } from "../../components/Fallback"
 
 const Statistics = () => {
-  const name = "American dollar"
-  const count = 204
-  const amount = 10
+  const { data, loading, error } = useStatisticsQuery()
+
+  if (loading) {
+    return <Fallback>Loading...</Fallback>
+  }
+
+  if (error || !data) {
+    return <Fallback>Could not load stats.</Fallback>
+  }
+
+  const {
+    mostPopularDestination,
+    totalAmountConverted,
+    totalConversionsCount,
+  } = data.statistics
 
   return (
     <Layuot>
       <Stat>
-        <Title>{name}</Title>
+        <Title>{mostPopularDestination.name}</Title>
         <StatInfo>most popular destination currency.</StatInfo>
       </Stat>
       <Stat>
-        <Title>{count}</Title>
+        <Title>{totalConversionsCount}</Title>
         <StatInfo>number of conversions made.</StatInfo>
       </Stat>
       <Stat>
-        <Title>${amount.toFixed(2)}</Title>
+        <Title>${totalAmountConverted.toFixed(2)}</Title>
         <StatInfo>amount of money converted.</StatInfo>
       </Stat>
     </Layuot>
