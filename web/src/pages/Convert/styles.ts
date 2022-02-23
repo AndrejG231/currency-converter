@@ -6,8 +6,8 @@ export const Layout = styled.div`
   display: grid;
   grid-template:
     "source destination" auto
-    "result result" 100px
     "input input" 40px
+    "result result" 100px
     "confirm confirm" 50px / 1fr 1fr;
   gap: 20px;
   place-items: center;
