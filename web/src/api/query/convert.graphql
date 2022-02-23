@@ -1,5 +1,5 @@
-query Conver($amount: Float!, $destination: String!, $source: String!) {
-  conver(amount: $amount, destination: $destination, source: $source) {
+query Convert($amount: Float!, $destination: String!, $source: String!) {
+  convert(amount: $amount, destination: $destination, source: $source) {
     value
     source
     destination
