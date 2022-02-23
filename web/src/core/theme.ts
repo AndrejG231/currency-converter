@@ -6,6 +6,7 @@ const theme: DefaultTheme = {
     bgSecondary: "#3666AE",
     white: "#FFFFFF",
     gray: "#2E3041",
+    grayDark: "#1E2031",
   },
 }
 

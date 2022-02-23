@@ -7,6 +7,7 @@ declare module "styled-components" {
       bgSecondary: string
       white: string
       gray: string
+      grayDark: string
     }
   }
 }
