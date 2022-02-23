@@ -1,0 +1,6 @@
+query AvailableCurrencies {
+  availableCurrencies {
+    name
+    symbol
+  }
+}

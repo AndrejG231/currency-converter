@@ -1,0 +1,10 @@
+query Statistics {
+  statistics {
+    mostPopularDestination {
+      symbol
+      name
+    }
+    totalAmountConverted
+    totalConversionsCount
+  }
+}
