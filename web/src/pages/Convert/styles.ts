@@ -12,4 +12,12 @@ export const Layout = styled.div`
   gap: 20px;
   place-items: center;
   padding: 20px;
+  @media screen and (max-width: 768px) {
+    grid-template:
+      "source" auto
+      "destination" auto
+      "input" 40px
+      "result" 100px
+      "confirm" 50px / 1fr;
+  }
 `
