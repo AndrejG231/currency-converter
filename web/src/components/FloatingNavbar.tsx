@@ -1,39 +1,20 @@
 import { useNavigate, useLocation } from "react-router-dom"
 import styled, { css } from "styled-components"
 import { Route } from "../types/route"
+import { Button } from "./Button"
 
 const Bar = styled.nav`
   width: 100%;
   position: absolute;
   bottom: 0;
   left: 0;
-  height: 50px;
-  background: ${({ theme }) => theme.colors.gray};
+  height: 60px;
+  background: ${({ theme }) => theme.colors.grayDark};
   display: flex;
   align-items: center;
   justify-content: center;
-`
-
-type ButtonProps = { isSelected: boolean }
-
-const Button = styled.button.attrs<ButtonProps>(({ isSelected }) => ({
-  className: isSelected ? "selected" : "",
-}))<ButtonProps>`
-  background: ${({ theme }) => theme.colors.bgSecondary};
-  color: ${({ theme }) => theme.colors.white};
-  padding: 5px 10px;
-  margin: 0 20px;
-  font-size: 1.4rem;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  &:hover {
-    background: ${({ theme }) => theme.colors.bgPrimary};
-  }
-  // Current path:
-  &.selected {
-    text-decoration: underline;
-  }
+  gap: 20px;
+  padding: 5px;
 `
 
 type Props = {
