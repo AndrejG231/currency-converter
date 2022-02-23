@@ -1,5 +1,6 @@
 import { FC } from "react"
 import styled from "styled-components"
+import { Title } from "./Title"
 
 const HeaderBox = styled.header`
   position: absolute;
@@ -9,15 +10,10 @@ const HeaderBox = styled.header`
   height: 80px;
 `
 
-const Title = styled.h1`
-  color: ${({ theme }) => theme.colors.white};
-  text-align: center;
-`
-
 const Header: FC = ({ children }) => {
   return (
     <HeaderBox>
-      <Title>{children}</Title>
+      <Title as="h1">{children}</Title>
     </HeaderBox>
   )
 }
