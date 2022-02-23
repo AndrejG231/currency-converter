@@ -12,7 +12,7 @@ class ConvertResolver {
   @Query(() => [Currency])
   availableCurrencies(@Ctx() { services }: Context): Currency[] {
     return Object.entries(services.converter.allowedCurrencies).map(
-      ([name, symbol]) => ({
+      ([symbol, name]) => ({
         name,
         symbol,
       })
