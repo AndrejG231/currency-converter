@@ -1,5 +1,3 @@
-You may be using [Markdown Live Preview](https://markdownlivepreview.com/).
-
 # Currency converter
 
 Currency converter app built on client-server architecture, using [Currency layer](https://currencylayer.com/) Api.
