@@ -23,7 +23,7 @@ class ConvertResolver {
    * Convert
    */
   @Query(() => ConversionResponse)
-  async conver(
+  async convert(
     @Arg("source") source: string,
     @Arg("destination") destination: string,
     @Arg("amount") amount: number,
