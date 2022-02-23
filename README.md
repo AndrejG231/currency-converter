@@ -44,7 +44,7 @@ Server is built with Node.js, providing graphql api.
   
   #### Resolvers
   
-  Resolvers are build using [typegraphql.](https://typegraphql.com)  
+  Resolvers are built using [typegraphql.](https://typegraphql.com)  
   Multiple functions are split into resolvers based on area of api they cover.  
   Resolvers are isolated, access other functions from server using context.  
     Each resolver has access to contex (`src/index.ts:33`):  
@@ -60,7 +60,7 @@ Server is built with Node.js, providing graphql api.
   
   Converter service provides conversions logic for rest of the application. On initializing, service fetches initial data  
   (allowed currencies and exchange rates). If these initial requests fail, server is not able to start. Service also updates  
-  exchange rates every 24hours. Data are stored in servers memore and not preserved on restart.
+  exchange rates every 24hours. Data are stored in servers memory and not preserved on restart.
   
 #### Run the server
   
