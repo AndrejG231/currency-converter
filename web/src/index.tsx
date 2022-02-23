@@ -1,4 +1,4 @@
-import { App } from "./App"
+import { Router } from "./core/Routes"
 import { render } from "react-dom"
 
-render(<App />, document.getElementById("root"))
+render(<Router />, document.getElementById("root"))
