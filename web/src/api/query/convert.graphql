@@ -1,5 +1,6 @@
 query Convert($amount: Float!, $destination: String!, $source: String!) {
   convert(amount: $amount, destination: $destination, source: $source) {
+    inputValue
     value
     source
     destination
