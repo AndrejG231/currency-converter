@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose"
 
 type ConversionsType = {
-  from: string
-  to: string
+  source: string
+  destination: string
   amount: number
   createdAt: Date
   updatedAt: Date
@@ -11,8 +11,8 @@ type ConversionsType = {
 const ConversionSchema = new Schema<ConversionsType>(
   {
     amount: { type: Number, required: true },
-    from: { type: String, required: true },
-    to: { type: String, required: true },
+    source: { type: String, required: true },
+    destination: { type: String, required: true },
   },
   { timestamps: true }
 )

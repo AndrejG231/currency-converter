@@ -18,27 +18,27 @@ class ConvertResolver {
 
   @Query(() => ConversionResponse)
   async conver(
-    @Arg("from") from: string,
-    @Arg("to") to: string,
+    @Arg("source") source: string,
+    @Arg("destination") destination: string,
     @Arg("amount") amount: number,
     @Ctx() { models, services }: Context
-  ) {
+  ): Promise<ConversionResponse> {
     // Check correct currency
-    if (!services.converter.isValidCurrency(from))
-      throw new InvalidCurrencyError("from", from)
-    if (!services.converter.isValidCurrency(to))
-      throw new InvalidCurrencyError("to", to)
+    if (!services.converter.isValidCurrency(source))
+      throw new InvalidCurrencyError("source", source)
+    if (!services.converter.isValidCurrency(destination))
+      throw new InvalidCurrencyError("destination", destination)
 
-    const result = services.converter.convert(from, to, amount)
+    const result = await services.converter.convert(source, destination, amount)
 
     // Store conversions history in database
     new models.Conversions({
-      from,
-      to,
+      source,
+      destination,
       amount,
     }).save()
 
-    return { value: result }
+    return { value: result, source, destination }
   }
 }
 

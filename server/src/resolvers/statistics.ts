@@ -28,7 +28,7 @@ class StatisticsResolver {
       {
         $group: {
           _id: "statistics",
-          mostPopular: { $first: "$_id" },
+          mostPopular: { $first: "$destination" },
           count: { $sum: "$count" },
           amount: { $sum: "$amount" },
         },

@@ -4,6 +4,12 @@ import { Field, ObjectType } from "type-graphql"
 class ConversionResponse {
   @Field()
   value: number
+
+  @Field()
+  source: string
+
+  @Field()
+  destination: string
 }
 
 export { ConversionResponse }
