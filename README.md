@@ -86,7 +86,6 @@ Single-page web application built with React.js.
 - [Apollo Client](https://www.apollographql.com/docs/react/) - graphql client
 - [Styled Components](https://styled-components.com/) - css in js styling
 - [Graphql Code Generator](https://www.graphql-code-generator.com/) - generator of type definitions for graphql schema
-- [Jest](https://jestjs.io/) - testing library
 
 #### Folder structure
   `| -- api` - graphql client, queries, mutation, generated types  
