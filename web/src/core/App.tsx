@@ -6,6 +6,7 @@ import { Screen } from "../components/Screen"
 import { routes } from "./routes"
 import { BrowserRouter } from "react-router-dom"
 import { FloatingNavbar } from "../components/FloatingNavbar"
+import { Header } from "../components/Header"
 
 const App = () => {
   return (
@@ -13,8 +14,9 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <Screen>
-          <FloatingNavbar routes={routes} />
           <Router routes={routes} />
+          <Header>Currency Converter</Header>
+          <FloatingNavbar routes={routes} />
         </Screen>
       </ThemeProvider>
     </BrowserRouter>
