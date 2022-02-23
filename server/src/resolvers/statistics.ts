@@ -9,11 +9,11 @@ class StatisticsResolver {
   async statistics(
     @Ctx() { models, services }: Context
   ): Promise<StatisicsResponse> {
-    // Select mostPopular, totalCount of entires, total amount transferred
+    // Select mostPopular, totalCount of entries, total amount transferred
     const [stats] = await models.Conversions.aggregate([
       {
         $group: {
-          _id: "$to",
+          _id: "$destination",
           amount: {
             $sum: "$amount",
           },
@@ -28,7 +28,7 @@ class StatisticsResolver {
       {
         $group: {
           _id: "statistics",
-          mostPopular: { $first: "$destination" },
+          mostPopular: { $first: "$_id" },
           count: { $sum: "$count" },
           amount: { $sum: "$amount" },
         },
