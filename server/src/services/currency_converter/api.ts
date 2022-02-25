@@ -20,7 +20,9 @@ class Api {
       }),
       (error) => {
         // Secure same response format for every error
+
         const response = error.response ?? {}
+
         const { status = 500, statusText = "Unknown error occured." } = response
 
         return {
@@ -42,16 +44,15 @@ class Api {
 
   /**
    * Live rates for specific currency
-   * !!@param source NOT SUPPORTED - free Api tier
    */
   async live(
+    source: string,
     currencies: string[] = []
-    // source?: string
   ): Promise<LiveRatesResponse> {
     const { data } = await this.instance({
       method: "GET",
       url: "/live",
-      params: { currencies: currencies.join(",") /* source */ },
+      params: { source, currencies: currencies.join(",") },
     })
 
     return data
